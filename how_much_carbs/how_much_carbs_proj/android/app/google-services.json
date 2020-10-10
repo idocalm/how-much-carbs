@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "104892538357",
+    "firebase_url": "https://howmuchcarbs-9002a.firebaseio.com",
+    "project_id": "howmuchcarbs-9002a",
+    "storage_bucket": "howmuchcarbs-9002a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104892538357:android:3256d23409dedc4d7454bc",
+        "android_client_info": {
+          "package_name": "com.example.how_much_carbs_proj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104892538357-edk1vm83dj6m27cs4nto79hdrqj0aq71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs-kivwJ47odPdojAIIjJ__pswKVrCWAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104892538357-edk1vm83dj6m27cs4nto79hdrqj0aq71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
