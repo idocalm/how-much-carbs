@@ -27,12 +27,7 @@ class MyApp extends StatelessWidget {
       locale: Locale("he","IL"),
       debugShowCheckedModeBanner: false,
       title: 'פחמי-כמה?',
-      theme: ThemeData(
-
-        primarySwatch: Colors.purple,
-
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: ThemeData.dark(),
       home: MyHomePage(title: 'פחמי-כמה?'),
     );
   }
@@ -50,30 +45,89 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
  
+  
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  FirebaseAuth mAuth = FirebaseAuth.instance;
+  Future<void> submitData() async
+  {
+    try {
+    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    email: emailController.text,
+    password: passwordController.text
+  );
+  } 
+  on FirebaseAuthException catch (e) {
+  if (e.code == 'weak-password') {
+    print('The password provided is too weak.');
+  } else if (e.code == 'email-already-in-use') {
+    print('The account already exists for that email.');
+  }
+  //TODO: User has signed in, move to main page by- pushPage
+} catch (e) {
+  print(e);
+}
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    FirebaseAuth.instance
+    .authStateChanges()
+    .listen((User user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+        //TODO: User is already in, move to main page by- pushPage
+      }
+    });
     return Scaffold(
       appBar: AppBar(
-
+        backgroundColor: Colors.purple,
         title: Text(widget.title,),
       ),
-      body: Center(
-        child: Column(
-
-          
-          mainAxisAlignment: MainAxisAlignment.center,
-          
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            TextFormField(
+            Padding(  
+            padding: const EdgeInsets.all(10.0),
+            child: TextFormField(
+              controller: emailController,
+              decoration: new InputDecoration(
+                hintStyle: TextStyle(fontSize: 17),
+                suffixIcon: Icon(Icons.account_circle_sharp),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(5),
+                hintText: 'אימייל'
             ),
-            Text(
-              'l',
-              style: Theme.of(context).textTheme.headline4,
             ),
+            ),
+            Padding(  
+            padding: const EdgeInsets.all(10.0),
+            child: TextFormField(
+              controller: passwordController,
+              decoration: new InputDecoration(
+                hintStyle: TextStyle(fontSize: 17),
+                suffixIcon: Icon(Icons.account_circle_sharp),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(5),
+                hintText: 'סיסמא'
+            ),
+            ),
+            ),
+            Padding(  
+            padding: const EdgeInsets.all(15.0),
+            child: RaisedButton(
+              onPressed: () {submitData();},
+              child: const Text(
+                "שלח",
+                style: TextStyle(fontSize: 15)
+              ),
+            ),
+                ),
+            
           ],
         ),
-      ),
-    );
+      );
   }
 }
