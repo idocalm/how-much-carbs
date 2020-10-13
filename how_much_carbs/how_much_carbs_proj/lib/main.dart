@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:how_much_carbs_proj/home.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       locale: Locale("he","IL"),
       debugShowCheckedModeBanner: false,
       title: 'פחמי-כמה?',
-      theme: ThemeData.dark(),
+      theme: ThemeData(fontFamily: 'Assistant'),
       home: MyHomePage(title: 'פחמי-כמה?'),
     );
   }
@@ -62,8 +62,13 @@ class _MyHomePageState extends State<MyHomePage> {
     print('The password provided is too weak.');
   } else if (e.code == 'email-already-in-use') {
     print('The account already exists for that email.');
-  }
-  //TODO: User has signed in, move to main page by- pushPage
+  }else if(e == null)
+  {
+  Navigator.push(
+            context, 
+            MaterialPageRoute(builder: (context) => Home()),                
+          );
+  }       
 } catch (e) {
   print(e);
 }
@@ -71,6 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+
     FirebaseAuth.instance
     .authStateChanges()
     .listen((User user) {
@@ -78,9 +85,15 @@ class _MyHomePageState extends State<MyHomePage> {
         print('User is currently signed out!');
       } else {
         print('User is signed in!');
-        //TODO: User is already in, move to main page by- pushPage
+          Navigator.push(
+            context, 
+            MaterialPageRoute(builder: (context) => HomePage(),),                
+          );
+          }
+          
+
       }
-    });
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
@@ -94,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: TextFormField(
               controller: emailController,
               decoration: new InputDecoration(
-                hintStyle: TextStyle(fontSize: 17),
+                hintStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 suffixIcon: Icon(Icons.account_circle_sharp),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(5),
@@ -107,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: TextFormField(
               controller: passwordController,
               decoration: new InputDecoration(
-                hintStyle: TextStyle(fontSize: 17),
+                hintStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 suffixIcon: Icon(Icons.account_circle_sharp),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(5),
@@ -121,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {submitData();},
               child: const Text(
                 "שלח",
-                style: TextStyle(fontSize: 15)
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)
               ),
             ),
                 ),
