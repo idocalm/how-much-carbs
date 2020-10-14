@@ -42,11 +42,23 @@ class HomePageState extends State<HomePage> {
   final passwordController = TextEditingController();
   FirebaseAuth mAuth = FirebaseAuth.instance;
   
+  void signOut(){
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.signOut();
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => signOut(),
+          
+        ),
       ),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -2,15 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:how_much_carbs_proj/home.dart';
-import 'package:how_much_carbs_proj/signin.dart';
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
-}
+import 'package:how_much_carbs_proj/main.dart';
 
-class MyApp extends StatelessWidget {
+class SignIn extends StatelessWidget {
   
 
   // This widget is the root of your application.
@@ -29,22 +23,22 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'פחמי-כמה?',
       theme: ThemeData(fontFamily: 'Assistant'),
-      home: MyHomePage(title: 'פחמי-כמה?'),
+      home: SignInPage(title: 'פחמי-כמה?'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class SignInPage extends StatefulWidget {
+  SignInPage({Key key, this.title}) : super(key: key);
 
  
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  SignInPageState createState() => SignInPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class SignInPageState extends State<SignInPage> {
  
   
   final emailController = TextEditingController();
@@ -52,49 +46,23 @@ class _MyHomePageState extends State<MyHomePage> {
   FirebaseAuth mAuth = FirebaseAuth.instance;
   Future<void> submitData() async
   {
-    try {
-    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+   try {
+  UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
     email: emailController.text,
     password: passwordController.text
   );
-  } 
-  on FirebaseAuthException catch (e) {
-  if (e.code == 'weak-password') {
-    print('The password provided is too weak.');
-  } else if (e.code == 'email-already-in-use') {
-    print('The account already exists for that email.');
-  }else if(e == null)
-  {
-  Navigator.push(
-            context, 
-            MaterialPageRoute(builder: (context) => Home()),                
-          );
-  }       
-} catch (e) {
-  print(e);
-}
+} on FirebaseAuthException catch (e) {
+  if (e.code == 'user-not-found') {
+    print('No user found for that email.');
+  } else if (e.code == 'wrong-password') {
+    print('Wrong password provided for that user.');
   }
+} 
+  }
+  
 
   @override
   Widget build(BuildContext context) {
-
-
-    FirebaseAuth.instance
-    .authStateChanges()
-    .listen((User user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
-          Navigator.push(
-            context, 
-            MaterialPageRoute(builder: (context) => HomePage(),),                
-          );
-          }
-          
-
-      }
-    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
@@ -142,13 +110,12 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(  
             padding: const EdgeInsets.all(10.0),
             child: InkWell(onTap: (){
-              //TODO: Move to signin page
                Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => SignIn()),                
+                  MaterialPageRoute(builder: (context) => MyApp()),                
                );
             },
-             child: Text("כבר יש לך חשבון?"),
+             child: Text("עוד אין לך חשבון?"),
            ),
             ),
           ],
